@@ -347,7 +347,6 @@ export const FteCapacityPage: React.FC = () => {
       'Break Hours': `${m.breakHours}h (1h break/day)`,
       'Remaining Hours': `${m.remainingHours}h`,
       'Actual Hours': m.actualHours,
-      'Variance': m.capacityVariance,
       'Utilization (%)': `${m.fte}%`,
       'Workload Status': m.status,
     }));
@@ -763,7 +762,6 @@ export const FteCapacityPage: React.FC = () => {
                 <th className="py-3 px-4 font-semibold text-right">Target Hour (h)</th>
                 <th className="py-3 px-4 font-semibold text-right">Remaining Hours (h)</th>
                 <th className="py-3 px-4 font-semibold text-right">Actual Hours (h)</th>
-                <th className="py-3 px-4 font-semibold text-right">Variance</th>
                 <th className="py-3 px-4 font-semibold text-right">Utilization %</th>
                 <th className="py-3 px-4 font-semibold">Status</th>
                 <th className="py-3 px-4 font-semibold text-center">Action</th>
@@ -772,7 +770,7 @@ export const FteCapacityPage: React.FC = () => {
             <tbody className="divide-y divide-slate-100">
               {displayedMetrics.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="py-10 text-center text-slate-500">
+                  <td colSpan={10} className="py-10 text-center text-slate-500">
                     <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
                     <p className="font-semibold text-slate-700">No employees match current filters</p>
                     <p className="text-slate-400 text-xs mt-0.5 max-w-sm mx-auto">
@@ -854,19 +852,6 @@ export const FteCapacityPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">
                       {item.actualHours}h
-                    </td>
-                    <td className="py-3 px-4 text-right font-mono">
-                      <span
-                        className={
-                          item.capacityVariance < 0
-                            ? 'text-rose-600 font-bold'
-                            : 'text-emerald-700 font-semibold'
-                        }
-                      >
-                        {item.capacityVariance > 0
-                          ? `+${item.capacityVariance}h`
-                          : `${item.capacityVariance}h`}
-                      </span>
                     </td>
                     <td className="py-3 px-4 text-right font-mono font-bold">
                       <span

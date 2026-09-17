@@ -289,7 +289,6 @@ export const EmployeeFteDetailsModal: React.FC<EmployeeFteDetailsModalProps> = (
   const handleExportData = () => {
     const dailyExportData = dailyDistribution.map(day => {
       const target = day.isWorkingDay ? dailyTargetHours : 0;
-      const diff = Number((day.hours - target).toFixed(1));
       const taskSummary = day.tasks.map(t => `${t.taskId} (${t.hours}h)`).join('; ');
       return {
         'Date': day.date,
@@ -297,7 +296,6 @@ export const EmployeeFteDetailsModal: React.FC<EmployeeFteDetailsModalProps> = (
         'Working Day': day.isWorkingDay ? 'Yes' : 'No (Weekend/Non-working)',
         'Tracked Hours': day.hours,
         'Target Hours': target,
-        'Variance (h)': diff,
         'Tasks Count': day.taskCount,
         'Tasks Executed': taskSummary || 'None',
       };
@@ -456,15 +454,13 @@ export const EmployeeFteDetailsModal: React.FC<EmployeeFteDetailsModalProps> = (
                         <th className="py-3 px-4 font-semibold">Date</th>
                         <th className="py-3 px-4 font-semibold text-right">Daily Tracked</th>
                         <th className="py-3 px-4 font-semibold text-right">Target Hour ({dailyTargetHours}h)</th>
-                        <th className="py-3 px-4 font-semibold text-right">Daily Variance</th>
                         <th className="py-3 px-4 font-semibold text-center">Tasks Executed</th>
-                        <th className="py-3 px-4 font-semibold">Task Breakdown & Allocation</th>
+                        <th className="py-3 px-4 font-semibold">Task Breakdown</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {dailyDistribution.map(day => {
                         const target = day.isWorkingDay ? dailyTargetHours : 0;
-                        const diff = Number((day.hours - target).toFixed(1));
                         const isExpanded = expandedDates[day.date];
                         const hasMultipleTasks = day.taskCount > 1;
 
@@ -520,11 +516,7 @@ export const EmployeeFteDetailsModal: React.FC<EmployeeFteDetailsModalProps> = (
                               <td className="py-3 px-4 text-right font-mono text-slate-500">
                                 {day.isWorkingDay ? `${target}h` : '0h (Weekend)'}
                               </td>
-                              <td className="py-3 px-4 text-right font-mono">
-                                <span className={diff >= 0 && day.hours > 0 ? 'text-emerald-700 font-semibold' : diff < 0 ? 'text-rose-600 font-medium' : 'text-slate-500'}>
-                                  {diff > 0 ? `+${diff}h` : `${diff}h`}
-                                </span>
-                              </td>
+  
                               <td className="py-3 px-4 text-center">
                                 {day.taskCount === 0 ? (
                                   <span className="text-slate-400 font-mono">0</span>
@@ -589,7 +581,7 @@ export const EmployeeFteDetailsModal: React.FC<EmployeeFteDetailsModalProps> = (
                             {/* Detailed Accordion for Multi-Task Breakdown */}
                             {isExpanded && day.tasks.length > 0 && (
                               <tr className="bg-slate-50/70 border-b border-slate-200/80">
-                                <td colSpan={7} className="p-4">
+                                <td colSpan={6} className="p-4">
                                   <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs space-y-3">
                                     <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
                                       <div className="flex items-center gap-2">
