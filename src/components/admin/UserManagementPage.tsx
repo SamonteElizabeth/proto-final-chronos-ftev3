@@ -221,7 +221,7 @@ export const UserManagementPage: React.FC = () => {
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <div className="text-2xl font-bold text-purple-600">{engineersCount}</div>
-          <div className="text-xs text-slate-500 mt-1 font-normal">Engineers</div>
+          <div className="text-xs text-slate-500 mt-1 font-normal">Employee</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
