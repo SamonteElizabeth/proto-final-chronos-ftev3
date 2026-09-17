@@ -1431,96 +1431,151 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onViewTask }
         </div>
       )}
 
-      {/* ================= SECTION 3: DEADLINES & COMPLIANCE ================= */}
-      {(activeSection === 'all' || activeSection === 'compliance') && (
-        <div className="space-y-6">
-          {/* 9. Overdue Tasks by Department (Landscape Card) */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  Overdue Tasks by Department
-                  {overdueTasksCount > 0 && (
-                    <span className="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                      {overdueTasksCount} Overdue Items
-                    </span>
-                  )}
-                </h3>
-                <p className="text-xs text-slate-500">Uncompleted tasks past deadline across delivery units</p>
-              </div>
+     {/* ================= SECTION 3: DEADLINES & COMPLIANCE ================= */}
+{(activeSection === 'all' || activeSection === 'compliance') && (
+  <div className="space-y-6">
+
+    {/* 9. Overdue Tasks by Department - Admin/Manager Only */}
+    {!isDeptManager && (
+      <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              Overdue Tasks by Department
 
               {overdueTasksCount > 0 && (
-                <button
-                  onClick={() => {
-                    setSelectedOverdueDept(null);
-                    setIsOverdueModalOpen(true);
-                  }}
-                  className="text-xs text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-rose-200/60 self-start sm:self-auto"
-                >
-                  <span>Detailed Drill Down</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
-            <div className="h-72 sm:h-80 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={overdueTasksByDeptData}
-                  margin={{ top: 15, right: 20, left: -10, bottom: 20 }}
-                  barSize={deptBarSize}
-                  maxBarSize={48}
-                >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                  <XAxis dataKey="department" tick={{ fontSize: 12, fill: '#475569', fontWeight: 600 }} />
-                  <YAxis tick={{ fontSize: 11, fill: '#475569' }} allowDecimals={false} />
-                  <Tooltip
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        const data = payload[0].payload;
-                        return (
-                          <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg text-xs space-y-1">
-                            <p className="font-bold text-sm text-rose-300">{data.fullName}</p>
-                            <p>Overdue Tasks: <strong className="text-rose-400">{data.overdueCount}</strong></p>
-                            <p className="text-[10px] text-slate-400">Click bar to inspect task roster</p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Bar
-                    dataKey="overdueCount"
-                    name="Overdue Tasks"
-                    fill="#EF4444"
-                    radius={[6, 6, 0, 0]}
-                    onClick={(entry) => {
-                      if (entry && entry.id) {
-                        setSelectedOverdueDept(entry.id);
-                        setIsOverdueModalOpen(true);
-                      }
-                    }}
-                    cursor="pointer"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <span className="text-slate-500">Schedule SLA Benchmark: Target 0 overdue workstreams</span>
-              {overdueTasksCount === 0 ? (
-                <span className="text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg font-semibold border border-emerald-200">
-                  ✓ SLA Met: 0 Overdue Tasks
-                </span>
-              ) : (
-                <span className="text-rose-700 bg-rose-50 px-3 py-1 rounded-lg font-semibold border border-rose-200">
-                  ⚠️ {overdueTasksCount} overdue tasks flagged across {overdueTasksByDeptData.filter(d => d.overdueCount > 0).length} departments
+                <span className="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                  {overdueTasksCount} Overdue Items
                 </span>
               )}
-            </div>
+            </h3>
+
+            <p className="text-xs text-slate-500">
+              Uncompleted tasks past deadline across delivery units
+            </p>
           </div>
+
+          {overdueTasksCount > 0 && (
+            <button
+              onClick={() => {
+                setSelectedOverdueDept(null);
+                setIsOverdueModalOpen(true);
+              }}
+              className="text-xs text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-rose-200/60 self-start sm:self-auto"
+            >
+              <span>Detailed Drill Down</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
-      )}
+
+        <div className="h-72 sm:h-80 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={overdueTasksByDeptData}
+              margin={{
+                top: 15,
+                right: 20,
+                left: -10,
+                bottom: 20
+              }}
+              barSize={deptBarSize}
+              maxBarSize={48}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#E2E8F0"
+              />
+
+              <XAxis
+                dataKey="department"
+                tick={{
+                  fontSize: 12,
+                  fill: '#475569',
+                  fontWeight: 600
+                }}
+              />
+
+              <YAxis
+                tick={{
+                  fontSize: 11,
+                  fill: '#475569'
+                }}
+                allowDecimals={false}
+              />
+
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+
+                    return (
+                      <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg text-xs space-y-1">
+                        <p className="font-bold text-sm text-rose-300">
+                          {data.fullName}
+                        </p>
+
+                        <p>
+                          Overdue Tasks:{' '}
+                          <strong className="text-rose-400">
+                            {data.overdueCount}
+                          </strong>
+                        </p>
+
+                        <p className="text-[10px] text-slate-400">
+                          Click bar to inspect task roster
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return null;
+                }}
+              />
+
+              <Bar
+                dataKey="overdueCount"
+                name="Overdue Tasks"
+                fill="#EF4444"
+                radius={[6, 6, 0, 0]}
+                onClick={(entry) => {
+                  if (entry && entry.id) {
+                    setSelectedOverdueDept(entry.id);
+                    setIsOverdueModalOpen(true);
+                  }
+                }}
+                cursor="pointer"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <span className="text-slate-500">
+            Schedule SLA Benchmark: Target 0 overdue workstreams
+          </span>
+
+          {overdueTasksCount === 0 ? (
+            <span className="text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg font-semibold border border-emerald-200">
+              ✓ SLA Met: 0 Overdue Tasks
+            </span>
+          ) : (
+            <span className="text-rose-700 bg-rose-50 px-3 py-1 rounded-lg font-semibold border border-rose-200">
+              ⚠️ {overdueTasksCount} overdue tasks flagged across{' '}
+              {overdueTasksByDeptData.filter(
+                d => d.overdueCount > 0
+              ).length}{' '}
+              departments
+            </span>
+          )}
+        </div>
+      </div>
+    )}
+
+  </div>
+)}
 
       {/* ================= DRILL-DOWN MODAL FOR OVERDUE TASKS ================= */}
       {isOverdueModalOpen && (
