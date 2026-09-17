@@ -1,0 +1,8 @@
+{
+  "name": "proto-final-chronos-ftev3",
+  "description": "Enterprise Task Management, Time Tracking, and FTE \u0026 Utilization Reporting System with multi-role access, real-time timers, and automated analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
